@@ -66,29 +66,16 @@ const getState = ({ getStore, setStore }) => {
 					this.getConcat(store.valueselect);
 				}
 			},
-			change (e) {
-				setStore({
-					valueselect: e
-				});
-				this.passgetConcat();
-			},
-
 			
 			getAgendas() {
-				const store = getStore();
 
 				fetch(`https://assets.breatheco.de/apis/fake/contact/agenda`)
 				.then(res => res.json())
 				.then(data => {
 					setStore({
-						agenda: data.reverse()
+						agenda: data.reverse(),
+						valueselect: data[0]
 					});
-					if (store.valueselect === ""){
-						setStore({
-							valueselect: data[0]
-						});
-					}
-
 					this.passgetConcat();
 				})
 				.catch(error => {
@@ -109,16 +96,14 @@ const getState = ({ getStore, setStore }) => {
 				});
 			},
 			
-			getUser(id) {
-				const store = getStore();
-				fetch(`https://assets.breatheco.de/apis/fake/contact/${id}`)
+			getUser(url) {
+
+				fetch(url)
 				.then(res => res.json())
 				.then(data => {
 					setStore({
 						user: data
-						
 					});
-					console.log(store.user);
 				})
 				.catch(error => {
 					return error;
@@ -178,7 +163,7 @@ const getState = ({ getStore, setStore }) => {
 				}
 			},
 			
-			resetError: () =>{
+			resetError(){
 				setStore({
 					//form state
 					isView: true,

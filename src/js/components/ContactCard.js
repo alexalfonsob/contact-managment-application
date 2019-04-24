@@ -17,10 +17,9 @@ class ContactCard extends React.Component {
 						
 							<Context.Consumer>
 								{({actions}) => {
-								
 									return (
 										<div>
-											<button className="btn" onClick={(e) => {this.props.history.push(`/edit/${this.props.id}`) ; actions.getUser(`https://assets.breatheco.de/apis/fake/contact/${this.props.id}`);}}><i className="fas fa-pencil-alt mr-3"></i>Editar</button>
+											<button className="btn" onClick={(e) => {this.props.history.push(`/edit/${this.props.id}`) ; actions.getUser(`https://assets.breatheco.de/apis/fake/contact/agenda/my_super_agenda/${this.props.id}`);}}><i className="fas fa-pencil-alt mr-3"></i>Editar</button>
 											<button className="btn" onClick={(e) => {this.props.onDelete(); actions.sniperTarget(this.props.id);}}><i className="fas fa-trash-alt"></i></button>
 										</div>
 									);}

@@ -4,33 +4,45 @@ import PropTypes from 'prop-types';
 import { Context } from "../store/appContext";
 
 class SearchAgenda extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			valueselect: ""
+		};
+	}
+	change (e) {
+		this.setState({
+			valueselect: e
+		});
+	}
 
 	render() {
 		return (
 			<div>
-				<Context.Consumer>
-					{
-						({ store, actions }) => {
-						
-							return (
-								<div>
-									<div><h6> Current agenda - {store.valueselect}</h6></div>
-									<select  id="agenda" name = "valueselect" value={this.props.item}  className="form-control" onChange={(e) => actions.change(e.target.value)}>
-										<Context.Consumer>
-											{
-												({ store, actions }) => {
-		
-													return store.agenda.map((item, i) => (
-														<option key={i} value={item}>{item}</option>
-												));}          
-											}
-										</Context.Consumer>
-									</select>
-								</div>);
-							}          
+				
+				<select  id="agenda" name = "valueselect" value={this.state.valueselect}  className="form-control" onChange={(e) => this.change(e.target.value)}>
+					<option> Current agenda - {this.props.item} </option>
+					<Context.Consumer>
+						{
+							({ store, actions }) => {
+							if (this.state.valueselect !== "")
+							{
+								/* Sincronizo el estado local del select
+								*  con el estado global
+								*/
+								actions.updateValueselect(this.state.valueselect);
+								// el estado local lo coloco en blanco para evitar bucle
+								this.setState({valueselect: ""});
+								// llamo la funcion que muestra la data actual del estado global de la agenda
+								actions.passgetConcat();
+								
+							} 
+								return store.agenda.map((item, i) => (
+									<option key={i} value={item}>{item}</option>
+							));}          
 						}
-				</Context.Consumer>
-	
+					</Context.Consumer>
+				</select>
 			</div>
 		);
 	}
