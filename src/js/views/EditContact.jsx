@@ -10,6 +10,9 @@ class EditContact extends React.Component {
 				<Context.Consumer>
 					{
 						({ store, actions }) => {
+						const  id  = this.props.match.params.id;
+						actions.passDetail(id);
+
 						if(store.send === true ){
 							this.props.history.goBack();
 							actions.send();
@@ -18,8 +21,7 @@ class EditContact extends React.Component {
 							alert("Error when trying to send the form");
 							actions.error();
 						}
-						const  id  = this.props.match.params.id;
-						return store.users.filter((users)  => users.id === id).map((users, i) => (
+						return (
 							<div key="1">
 								<h1 className="text-center mt-5">Edit a contact</h1>
 								<form method = "post" onSubmit={(e)=> {actions.editData(e, id);} }>
@@ -27,65 +29,55 @@ class EditContact extends React.Component {
 										<label>Agenda</label>
 										<input	type="text" 
 												name="agenda_slug"  
-												defaultValue={users.agenda_slug} 
-												className={`form-control ${store.Error_agenda_slug !== "" ? 'border-danger' : ''}`}
+												placeholder={store.detail.agenda_slug} 
+												className={`form-control`}
 												readOnly
 										/>
-										<span className="text-danger font-italic"><small>{store.Error_agenda_slug}</small></span>
 									</div>
 									<div className="form-group">
 										<label>Full Name</label>
-										<input	required
-												type="text" 
+										<input	type="text" 
 												name="full_name"  
-												defaultValue={users.full_name} 
+												placeholder={store.detail.full_name} 
 												autoComplete="off"  
 												onChange={(e) => actions.handleInputChange(e)} 
-												className={`form-control ${store.Error_full_name !== "" ? 'border-danger' : ''}`}
-												placeholder="Full Name"
+												className={`form-control`}
 										/>
-										<span className="text-danger font-italic"><small>{store.Error_full_name}</small></span>
 									</div>
 									<div className="form-group">
 										<label>Email</label>
 										<input	type="email" 
 												name="email"  
-												defaultValue={users.email} 
+												placeholder={store.detail.email} 
 												className="form-control"
 												readOnly
 										/>
-										<span className="text-danger font-italic"><small>{store.Error_email}</small></span>
 									</div>
 									<div className="form-group">
 										<label>Phone</label>
-										<input	required 
-												type="phone"name="phone" 
-												defaultValue={users.phone}  
+										<input	type="phone"name="phone" 
+												placeholder={store.detail.phone}  
 												autoComplete="off" 
 												onChange={(e) => actions.handleInputChange(e)}    
-												className={`form-control ${store.Error_phone !== "" ? 'border-danger' : ''}`}
-												placeholder="Enter phone" 
+												className={`form-control`}
+
 										/>
-										<span className="text-danger font-italic"><small>{store.Error_phone}</small></span>
 									</div>
 									<div className="form-group">
 										<label>Address</label>
-										<input	required 
-												type="text" 
+										<input	type="text" 
 												name="address"  
-												defaultValue={users.address}  
+												placeholder={store.detail.address}  
 												autoComplete="off" 
 												onChange={(e) => actions.handleInputChange(e)}   
-												className={`form-control ${store.Error_address !== "" ? 'border-danger' : ''}`}
-												placeholder="Enter address" 
+												className={`form-control`}
 										/>
-										<span className="text-danger font-italic"><small>{store.Error_address}</small></span>
 									</div>
 									<button type="submit" className="btn btn-primary form-control" >save</button>
 									<Link  className="mt-3 w-100 text-center" to="/" onClick={()=>{actions.resetError();}}>or get back to contacts</Link>
 								</form>
 							</div>
-						));}
+						);}
 					}
 				</Context.Consumer>
 			</div>

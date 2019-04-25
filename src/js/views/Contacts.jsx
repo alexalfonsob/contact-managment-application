@@ -20,16 +20,7 @@ export default class Contacts extends React.Component {
 					<Link className="btn btn-success" to="/add">Add new contact</Link>
 				</p>
 				<div className="m-2">
-					<Context.Consumer>
-						{
-							({ store, actions }) => {
-								return(
-									<SearchAgenda 
-									item = {store.valueselect}
-									/>
-							);}
-						}
-					</Context.Consumer>
+					<SearchAgenda />
 				</div>
 				<div id="contacts" className="panel-collapse collapse show" aria-expanded="true">
 					<ul className="list-group pull-down" id="contact-list">

@@ -7,7 +7,7 @@ const getState = ({ getStore, setStore }) => {
 
 			agenda:[],
 			users: [],
-			user: [],
+			detail: [],
 			
 			// Pincipal Array data
 			formData: [],
@@ -34,9 +34,19 @@ const getState = ({ getStore, setStore }) => {
 			full_name: "",
 			email: "",
 			phone: "",
-			address: ""
+			address: "",
+			prevID: ""
 
 			
+		},
+		values(agenda_slug, full_name, email, phone, address){
+			setStore({
+				agenda_slug: agenda_slug,
+				full_name: full_name,
+				email: email,
+				phone: phone,
+				address: address
+			});
 		},
 		actions: {
 
@@ -46,9 +56,12 @@ const getState = ({ getStore, setStore }) => {
 				});
 			},
 			updateValueselect: (value)=>{
+
 				setStore({
 					valueselect: value
 				});
+				
+				
 			},
 			error: () => {
 				setStore({
@@ -95,20 +108,26 @@ const getState = ({ getStore, setStore }) => {
 					return error;
 				});
 			},
-			
-			getUser(url) {
 
-				fetch(url)
+			getDetail (id){
+				const store = getStore();
+				fetch(`https://assets.breatheco.de/apis/fake/contact/${id}`)
 				.then(res => res.json())
 				.then(data => {
 					setStore({
-						user: data
+						detail: data,
+						prevID: id
+
+						
 					});
+
 				})
 				.catch(error => {
 					return error;
 				});
 			},
+
+
 			
 			handleCheckbox(){
 				const store = getStore();
@@ -194,10 +213,18 @@ const getState = ({ getStore, setStore }) => {
 				});
 			},
 			
+			passDetail(id){
+				const store = getStore();
+				if(store.prevID == id){
+					return;
+				}else {
+					this.getDetail(id);
+				}
+			},
+			
 			editData(e, id) {
 				e.preventDefault();
 				const store = getStore();
-				
 
 				fetch(`https://assets.breatheco.de/apis/fake/contact/${id}`, {
 						method: "PUT",
@@ -213,9 +240,8 @@ const getState = ({ getStore, setStore }) => {
 							send: true,
 							error: false
 						});
-						this.getAgendas();
-						this.passgetConcat();
-						this.resetError();
+					this.passgetConcat();
+					this.resetError();
 					})
 					.catch(error => {
 						setStore({
@@ -255,9 +281,15 @@ const getState = ({ getStore, setStore }) => {
 							send: true,
 							error: false
 						});
-					this.getAgendas();
-					this.passgetConcat();
-					this.resetError();
+						
+					if (store.isView === false){
+						this.getAgendas();
+						this.passgetConcat();
+						this.resetError();
+					}else if (store.isView === true){
+						this.passgetConcat();
+						this.resetError();
+					}
 					})
 					.catch(error => {
 						setStore({
@@ -282,7 +314,6 @@ const getState = ({ getStore, setStore }) => {
 						error: false,
 						target: ""
 					});
-					this.getAgendas();
 					this.passgetConcat();
 					this.resetError();
 				})
